@@ -1,8 +1,10 @@
-import {Sequelize} from 'sequelize'
+import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize('database', 'username', 'password', {
-    host: 'localhost',
-    dialect: 'mysql'
-})
+const sequelize = new Sequelize('mercado_estadisticas', 'root', 'jwCZfIYwUlzYldbqsEJsSkiUFPxbaaOS', {
+  host: 'shortline.proxy.rlwy.net',
+  port: 19091,
+  dialect: 'mysql',
+  
+});
 
-export default sequelize
+export default sequelize;

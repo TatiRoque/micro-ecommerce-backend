@@ -1,48 +1,35 @@
-import{Request, Response} from 'express'
+import { Request, Response } from 'express';
+import Sale from '../models/sale.models.js';
 
-//Obtener todas las ventas
-export const getSales = (req: Request, res: Response) => {
+export const getSales = async (req: Request, res: Response) => {
+  try {
+    const sales = await Sale.findAll();
+    res.json(sales);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      msg: 'Error al obtener ventas'
+    });
+  }
+};
 
-    res.json({
-        msg: 'get Sales'
-    })
+export const getSaleById = async (req: Request, res: Response) => {
+  const { id } = req.params;
 
-}
+  try {
+    const sale = await Sale.findByPk(id);
 
-//Obtener venta por ID
-export const getSale = (req: Request, res: Response)=>{
-    const {id} = req.params;
-    res.json({
-        msg: 'get Sale',
-        id
-    })
-}
+    if (!sale) {
+      return res.status(404).json({
+        msg: `No se encontró una venta con el id ${id}`,
+      });
+    }
 
-//Borrar venta por ID
-export const deleteSale = (req: Request, res: Response)=>{
-    const {id} = req.params;
-    res.json({
-        msg: 'delete Sale',
-        id
-    })
-}
-
-export const postSale = (req: Request, res: Response)=>{
-    const {body} = req;
-    console.log(body)
-    res.json({
-        msg: 'post Sale',
-        body
-    })
-}
-
-export const putSale = (req: Request, res: Response)=>{
-    const {body} = req;
-    const {id} = req.params;
-    console.log(body)
-    res.json({
-        msg: 'put Sale',
-        id,
-        body
-    })
-}
+    res.json(sale);
+  } catch (error) {
+    console.error('Error al obtener venta por ID:', error);
+    res.status(500).json({
+      msg: 'Error al obtener la venta',
+    });
+  }
+};

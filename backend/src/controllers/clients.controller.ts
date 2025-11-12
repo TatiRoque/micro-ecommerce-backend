@@ -1,10 +1,17 @@
 import {Request, Response} from 'express'
+import Cliente from '../models/client.models.js'
 
-export const getClients = (req: Request, res: Response) => {
+export const getClients = async (req: Request, res: Response) => {
 
-    res.json({
-        msg: 'get Clients'
-    })
+    try {
+    const client = await Cliente.findAll();
+    res.json(client);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      msg: 'Error al obtener ventas'
+    });
+  }
 
 }
 

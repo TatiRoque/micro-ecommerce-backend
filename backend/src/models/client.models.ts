@@ -1,22 +1,38 @@
-import db from '../db/connection.js'
-import {DataTypes} from 'sequelize'
+import db from '../db/connection.js';
+import { DataTypes } from 'sequelize';
 
-const Client = db.define('Client', {
-    name: {
-        type: DataTypes.STRING    
+const Cliente = db.define('Cliente', {
+  id_cliente: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  nombre: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+  },
+  sexo: {
+    type: DataTypes.ENUM('M', 'F', 'Otro'),
+    allowNull: true,
+  },
+  codigo_postal: {
+    type: DataTypes.STRING(10),
+    allowNull: true,
+  },
+  edad: {
+    type: DataTypes.INTEGER.UNSIGNED,
+    allowNull: true,
+  },
+  correo: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    validate: {
+      isEmail: true,
     },
-    age: {
-        type: DataTypes.INTEGER 
-    },
-    email: {
-        type: DataTypes.STRING
-    },
-    postalCode: {
-        type: DataTypes.STRING
-    },
-    gender: {
-        type: DataTypes.STRING
-    }
+  },
+}, {
+  tableName: 'clientes',
+  timestamps: false,
 });
 
-export default Client;
+export default Cliente

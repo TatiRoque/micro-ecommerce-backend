@@ -1,11 +1,17 @@
 import{Request, Response} from 'express'
+import Producto from '../models/product.models.js'
 
 //Obtener todos los productos
-export const getProducts = (req: Request, res: Response) => {
-
-    res.json({
-        msg: 'get Products'
-    })
+export const getProducts = async (req: Request, res: Response) => {
+  try {
+    const product = await Producto.findAll();
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      msg: 'Error al obtener ventas'
+    });
+  }
 
 }
 

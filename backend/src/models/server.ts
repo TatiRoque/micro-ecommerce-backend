@@ -43,7 +43,7 @@ class Server {
     async dbConnect() {
         try{
             await db.authenticate()
-            console.log('base de datos conectada')
+            console.log('base de datos conectada :D')
         }catch(error){
             console.error('base de datos no conectada :C')
         }
