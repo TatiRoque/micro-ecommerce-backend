@@ -22,11 +22,8 @@ const DetalleVenta = db.define('DetalleVenta', {
   precio_unitario: {
     type: DataTypes.DOUBLE,
     allowNull: false,
-  },
-  subtotal: {
-    type: DataTypes.DOUBLE,
-    allowNull: false,
-  },
+  }
+  
 }, {
   tableName: 'detalle_ventas',
   timestamps: false,

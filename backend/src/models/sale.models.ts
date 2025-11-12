@@ -21,7 +21,7 @@ const Sale = db.define('ventas', {
   }
 }, {
   tableName: 'ventas',
-  timestamps: false // ✅ sin schema aquí tampoco
+  timestamps: false 
 });
 
 export default Sale;

@@ -1,16 +1,13 @@
 import { Router } from 'express';
-import {
-    getSaleById,
-  getSales,
-} from '../controllers/sales.controller.js';
+import {getSaleById, getSales, createSale} from '../controllers/sales.controller.js';
 
 const router = Router();
 
-// GET todas las ventas
 router.get('/', getSales);
-router.get('/:id', getSaleById)
+router.get('/:id', getSaleById);
+router.post('/', createSale);
 
-// GET venta por ID (incluye detalles y productos)
+
 
 
 export default router;

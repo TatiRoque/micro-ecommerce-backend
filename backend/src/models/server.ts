@@ -5,26 +5,29 @@ import routesSale from '../routes/sales.route.js'
 import routesClient from '../routes/clients.routes.js'
 import db from '../db/connection.js';
 
+
+
 class Server {
-    private app:Application;
+    private app: Application;
     private port: string;
 
-    constructor(){
+    constructor() {
         this.app = express();
         this.port = process.env.PORT || '3001';
-        this.listen()
+
         this.midlewares();
         this.routes();
         this.dbConnect();
+        this.listen();
     }
-    listen(){
-        this.app.listen(this.port, ()=>{
+
+    listen() {
+        this.app.listen(this.port, () => {
             console.log(`Aplicacion corriendo en el puerto ${this.port}`)
         })
     }
 
-    //configurar ruta
-    routes(){
+    routes() {
         this.app.get('/', (req: Request, res: Response) => {
             res.json({
                 msg: 'API Funcionando'
@@ -35,21 +38,18 @@ class Server {
         this.app.use('/api/clients', routesClient)
     }
 
-    midlewares(){
-        //Se parsea el body
-        this.app.use(express.json())
+    midlewares() {
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
     }
 
     async dbConnect() {
-        try{
+        try {
             await db.authenticate()
             console.log('base de datos conectada :D')
-        }catch(error){
+        } catch (error) {
             console.error('base de datos no conectada :C')
         }
     }
-
-
-
 }
 export default Server;
