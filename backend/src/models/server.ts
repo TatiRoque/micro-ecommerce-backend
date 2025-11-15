@@ -3,6 +3,7 @@ import type { Application, Request, Response } from 'express';
 import routesProduct from '../routes/products.routes.js'
 import routesSale from '../routes/sales.route.js'
 import routesClient from '../routes/clients.routes.js'
+import routesStats from '../routes/stats.routes.js'
 import db from '../db/connection.js';
 
 
@@ -33,9 +34,10 @@ class Server {
                 msg: 'API Funcionando'
             })
         })
-        this.app.use('/api/products', routesProduct)
-        this.app.use('/api/sales', routesSale)
-        this.app.use('/api/clients', routesClient)
+        this.app.use('/api/productos', routesProduct)
+        this.app.use('/api/ventas', routesSale)
+        this.app.use('/api/clientes', routesClient)
+        this.app.use('/api/estadisticas', routesStats)
     }
 
     midlewares() {

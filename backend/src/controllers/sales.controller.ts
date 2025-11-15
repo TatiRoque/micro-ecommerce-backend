@@ -98,5 +98,113 @@ export const createSale = async (req: Request, res: Response) => {
   }
 };
 
+export const updateSale = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { fecha, id_cliente, metodo_pago, detalles } = req.body;
+
+  const transaction = await db.transaction();
+
+  try {
+    const sale = await Sale.findByPk(id, { transaction });
+
+    if (!sale) {
+      await transaction.rollback();
+      return res.status(404).json({
+        msg: `No se encontró una venta con el id ${id} para actualizar.`,
+      });
+    }
+
+    let total_venta = 0;
+
+   
+    detalles.forEach((d: any) => {
+      
+      d.subtotal = d.cantidad * d.precio_unitario;
+      total_venta += d.subtotal;
+    });
+
+    
+    await sale.update(
+      {
+        fecha,
+        id_cliente,
+        metodo_pago,
+        total_venta, 
+      },
+      { transaction }
+    );
+
+    
+    await DetalleVenta.destroy({
+      where: { id_venta: id },
+      transaction,
+    });
+
+    
+    for (const item of detalles) {
+      await DetalleVenta.create(
+        {
+          id_venta: id,
+          id_producto: item.id_producto,
+          cantidad: item.cantidad,
+          precio_unitario: item.precio_unitario,
+        },
+        { transaction }
+      );
+    }
+
+    await transaction.commit();
+
+    res.json({
+      msg: 'Venta actualizada correctamente',
+      sale: sale,
+    });
+  } catch (error) {
+    console.error('Error al actualizar venta:', error);
+    await transaction.rollback();
+    res.status(500).json({
+      msg: 'Error al actualizar la venta',
+    });
+  }
+};
+
+export const deleteSale = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const transaction = await db.transaction();
+
+  try {
+    const sale = await Sale.findByPk(id, { transaction });
+
+    if (!sale) {
+      await transaction.rollback();
+      return res.status(404).json({
+        msg: `No se encontró una venta con el id ${id} para eliminar.`,
+      });
+    }
+
+    
+    await DetalleVenta.destroy({
+      where: { id_venta: id },
+      transaction,
+    });
+
+    
+    await sale.destroy({ transaction });
+
+    await transaction.commit();
+
+    res.json({
+      msg: `Venta con id ${id} y sus detalles eliminados correctamente.`,
+    });
+  } catch (error) {
+    console.error('Error al eliminar venta:', error);
+    await transaction.rollback();
+    res.status(500).json({
+      msg: 'Error al eliminar la venta',
+    });
+  }
+};
+
 
 
