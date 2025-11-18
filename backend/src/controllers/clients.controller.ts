@@ -5,6 +5,7 @@ export const getClients = async (req: Request, res: Response) => {
 
     try {
     const client = await Cliente.findAll();
+    console.log(client);
     res.json(client);
   } catch (error) {
     console.error(error);
