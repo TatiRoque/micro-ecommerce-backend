@@ -5,7 +5,16 @@ import db from '../db/connection.js';
 
 export const getSales = async (req: Request, res: Response) => {
   try {
-    const sales = await Sale.findAll();
+    const sales = await Sale.findAll({
+      include: [
+        {
+          model: DetalleVenta,
+          as: 'detalles'
+        }
+      ],
+      order: [['fecha', 'DESC']]
+    });
+
     res.json(sales);
   } catch (error) {
     console.error(error);
@@ -14,6 +23,7 @@ export const getSales = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 export const getSaleById = async (req: Request, res: Response) => {
   const { id } = req.params;
