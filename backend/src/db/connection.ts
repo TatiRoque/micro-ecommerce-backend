@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import * as dotenv from 'dotenv';
-dotenv.config(); // Cargar las variables
+dotenv.config();
 
 
 function getEnvVar(name: string): string {
