@@ -42,12 +42,11 @@ class Server {
     }
 
     middlewares() {
-        // 👉 ESTE ES EL FIX IMPORTANTE
+        
         this.app.use(cors({
-            origin: 'http://localhost:3000' // tu front Vite
+            origin: 'http://localhost:3000'
         }));
-        // Si querés permitir todo durante desarrollo:
-        // this.app.use(cors());
+        
 
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));

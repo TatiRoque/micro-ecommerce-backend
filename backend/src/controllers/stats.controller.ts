@@ -21,19 +21,39 @@ export const getDispersionPrecioCantidad = async (req: Request, res: Response) =
   }
 };
 
+
 export const getMetodosPagoPorFecha = async (req: Request, res: Response) => {
   try {
-    const [results] = await db.query(`
+  
+    const [rows] = await db.query(`
       SELECT 
         DATE(v.fecha) AS fecha,
         v.metodo_pago,
         SUM(v.total_venta) AS total
       FROM ventas v
       GROUP BY DATE(v.fecha), v.metodo_pago
-      ORDER BY fecha, metodo_pago;
+      ORDER BY fecha ASC;
     `);
 
-    res.json(results);
+
+    const grouped: any = {};
+
+    (rows as any[]).forEach(row => {
+      const fecha = row.fecha;
+
+      if (!grouped[fecha]) {
+        grouped[fecha] = {
+          fecha,
+          Tarjeta: 0,
+          Efectivo: 0,
+          Transferencia: 0
+        };
+      }
+
+      grouped[fecha][row.metodo_pago] = Number(row.total);
+    });
+
+    res.json(Object.values(grouped));
 
   } catch (error) {
     console.error("Error obteniendo métodos de pago por fecha:", error);
@@ -42,6 +62,7 @@ export const getMetodosPagoPorFecha = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 export const getUnidadesVendidasPorCategoria = async (req: Request, res: Response) => {
   try {
@@ -64,5 +85,3 @@ export const getUnidadesVendidasPorCategoria = async (req: Request, res: Respons
     });
   }
 };
-
-

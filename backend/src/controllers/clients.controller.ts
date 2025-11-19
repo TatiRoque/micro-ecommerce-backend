@@ -15,11 +15,11 @@ export const getClients = async (req: Request, res: Response) => {
 
 }
 
-//Obtener producto por ID
+
 export const getClient = (req: Request, res: Response)=>{
     const {id} = req.params;
     res.json({
         msg: 'get Client',
         id
     })
-}
+} 
